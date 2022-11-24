@@ -28,7 +28,7 @@ class HomeController extends Controller
     {
         return view('home', [
             'grades' => Grade::all(),
-            'sessions' => Session::with('attentances')->get(),
+            'sessions' => Session::with('attentances', 'grade', 'grade.users')->get(),
             'users' => User::all()
         ]);
     }
