@@ -39,8 +39,12 @@ Route::post('/create-session', function (Request $request) {
 Route::post('/collect-attendance', function (Request $request) {
     if ($request->session_id == '0') return redirect()->back();
 
-    foreach ($request->users as $user) {
-        Attentance::create(['session_id' => $request->session_id, 'user_id' => $user]);
+    $allowedUsers = Session::find($request->session_id)->grade->users;
+
+    foreach ($request->users as $userId) {
+        foreach ($allowedUsers as $user) {
+            if ($userId == $user->id) Attentance::create(['session_id' => $request->session_id, 'user_id' => $userId]);
+        }
     }
 
     return redirect('/home');

@@ -75,10 +75,11 @@
                                                         @endforeach
                                                     </td>
                                                     <td>
-                                                        @foreach ($session->grade->users->whereNotIn('id', $attendedUsersIds) as $user)
+                                                        @foreach ($session->grade->users->whereNotIn('id', $attendedUsersIds)->whereNotNull('grade_id') as $user)
                                                             {{ $user->name }} <br>
                                                         @endforeach
                                                     </td>
+                                                    @php $attendedUsersIds = [] @endphp
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -95,7 +96,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($users as $user)
+                                            @foreach ($users->whereNotNull('grade_id') as $user)
                                                 <tr>
                                                     <th scope="row">{{ $user->id }}</th>
                                                     <td>{{ $user->name }}</td>
@@ -190,7 +191,7 @@
                         </select>
 
                         <ul class="list-group mt-3">
-                            @foreach ($users as $user)
+                            @foreach ($users->whereNotNull('grade_id') as $user)
                                 <li class="list-group-item">
                                     <input class="form-check-input me-1" name="users[]" type="checkbox" value="{{ $user->id }}" id="user-{{ $user->id }}">
                                     <label class="form-check-label" for="user-{{ $user->id }}">{{ $user->name }}</label>
